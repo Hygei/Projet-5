@@ -24,7 +24,7 @@ function getProducts() {
         for (let product in products) {
             let productLink = document.createElement("a");
             document.querySelector(".items").appendChild(productLink);
-            productLink.href = "product.html?id=${resultatAPI[product]._id";
+            productLink.href = `product.html?id=${resultatAPI[product]._id}`;
 
             let productArticle = document.createElement("article");
             productLink.appendChild(productArticle);
