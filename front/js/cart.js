@@ -51,7 +51,7 @@ for (let item in copyOfLS) {
     let itemContentSetDelete = document.createElement("button");
     itemContent.appendChild(itemContentSetDelete);
     itemContentDesc.classList.add ("cart__item__content__settings__delete");
-    itemContentSetDelete.innerHTML = "Supprimer" 
+    itemContentSetDelete.innerHTML = {<p class=deleteItem>Supprimer</p>}
     // ajouter class "deleteItem"
     
     itemContentSetDelete.addEventListener("click", (e) => {
