@@ -40,7 +40,7 @@ fetch(newUrl)
             e.preventDefault();
             const color = document.getElementById("colors");
             const quantity = document.getElementById("quantity");
-
+            
             let productAdded = {
                 name: product.name,
                 price: product.price,

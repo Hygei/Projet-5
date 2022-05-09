@@ -20,7 +20,7 @@ for (let item in copyOfLS) {
     let itemContentDesc = document.createElement("div");
     itemContent.appendChild(itemContentDesc);
     itemContentDesc.classList.add ("cart__item__content__description");
-    itemContentDesc.innerHTML = `${copyOfLS[item].name} ${copyOfLS[item].price + "€"} ${copyOfLS[item].color}`;
+    itemContentDesc.innerHTML = `${copyOfLS[item].name} <br> ${"Prix : " + copyOfLS[item].price + " €"} <br> ${"Couleur : " + copyOfLS[item].color}`;
 
     let itemContentSet = document.createElement("div");
     itemContent.appendChild(itemContentSet);
@@ -44,7 +44,7 @@ for (let item in copyOfLS) {
     // changer la valeur dans l'input fait changer le tableau
     input.addEventListener("change", (e) => {
         updateItemQuantity (copyOfLS[item], e.target.value);
-        
+
         if(e.target.value < 1 ){
             removeItemFromCart (copyOfLS[item]);
         }
