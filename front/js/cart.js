@@ -1,3 +1,4 @@
+// Récupération des données du panier
 let copyOfLS = JSON.parse(localStorage.getItem("cart"));
 console.log (copyOfLS)
 
@@ -19,7 +20,7 @@ for (let item in copyOfLS) {
     let itemContentDesc = document.createElement("div");
     itemContent.appendChild(itemContentDesc);
     itemContentDesc.classList.add ("cart__item__content__description");
-    itemContentDesc.innerHTML = `${copyOfLS[item].name} ${copyOfLS[item].price} ${copyOfLS[item].color}`;
+    itemContentDesc.innerHTML = `${copyOfLS[item].name} ${copyOfLS[item].price + "€"} ${copyOfLS[item].color}`;
 
     let itemContentSet = document.createElement("div");
     itemContent.appendChild(itemContentSet);
@@ -28,9 +29,7 @@ for (let item in copyOfLS) {
     let itemContentSetQuantity = document.createElement("div");
     itemContent.appendChild(itemContentSetQuantity);
     itemContentDesc.classList.add ("cart__item__content__settings__quantity");
-    // itemContentSetQuantity.innerHTML = "qté: " + copyOfLS[item].quantity;
-    
-    // ajouter un input
+   
     let p = document.createElement("p");
     let label = document.createElement("label");
     label.textContent = "Quantité : ";
@@ -45,14 +44,16 @@ for (let item in copyOfLS) {
     // changer la valeur dans l'input fait changer le tableau
     input.addEventListener("change", (e) => {
         updateItemQuantity (copyOfLS[item], e.target.value);
+        
+        if(e.target.value < 1 ){
+            removeItemFromCart (copyOfLS[item]);
+        }
     })
-
 
     let itemContentSetDelete = document.createElement("button");
     itemContent.appendChild(itemContentSetDelete);
     itemContentDesc.classList.add ("cart__item__content__settings__delete");
-    itemContentSetDelete.innerHTML = {<p class=deleteItem>Supprimer</p>}
-    // ajouter class "deleteItem"
+    itemContentSetDelete.innerHTML = `<p class=deleteItem>Supprimer</p>`
     
     itemContentSetDelete.addEventListener("click", (e) => {
         e.preventDefault();
@@ -61,28 +62,37 @@ for (let item in copyOfLS) {
 
 
 }
+// ---------------------------------------------------------------- Calcul du prix total -------------------------------------------------------------------------
 
-// Afficher la quantité total
-let totalQuantity = document.getElementById("totalQuantity");
-let sum = 0;
-for (let i = 0; i < copyOfLS.length; i++) {
-    sum += copyOfLS.quantity[i]
-    console.log(sum)
+// création d'un tableau avec les qtés
+let quantityTotalCalcul = [];
+// récupération des qtés et push dans le tableau
+for (let i = 0; i < copyOfLS.length; i++){
+    let quantityItemPanier = copyOfLS[i].quantity;
+    quantityTotalCalcul.push(quantityItemPanier)
 }
-    // const initialValue = 0;
-    // const sumWithInitial = copyOfLS.price.reduce(
-    //     (previousValue, currentValue) => previousValue + currentValue,
-    //     initialValue
-    // );
-    
-    // console.log(sumWithInitial);
+// Somme des qtés
+const reducer01 = (accumulator, currentValue) => accumulator + currentValue;
+const quantityTotal = quantityTotalCalcul.reduce(reducer01,0);
+
+const affichageQuantityTotal = document.getElementById("totalQuantity");
+affichageQuantityTotal.innerHTML = `${quantityTotal}`
+
+// Pour chaque item on multiplie la qté par le prix
+let priceTotalCalcul = [];
+for (let j = 0; j < copyOfLS.length; j++){
+    let priceItemPanier = copyOfLS[j].quantity*copyOfLS[j].price;
+    priceTotalCalcul.push(priceItemPanier)
+}
+// on additionne le prix obtenu de chaque items
+const reducer02 = (accumulator, currentValue) => accumulator + currentValue;
+const priceTotal = priceTotalCalcul.reduce(reducer02,0);
+// on injecte dans le HTML
+const affichagePriceTotal = document.getElementById("totalPrice");
+affichagePriceTotal.innerHTML = `${priceTotal}`
 
 
-
-// afficher le prix total
-let totalPrice = document.getElementById("totalPrice");
-
-
+// ----------------------------------------------------------------- Les fonctions du panier ---------------------------------------------------------------------------------
 
 function removeItemFromCart (itemToRemove) {
     //  Gestion du localStorage
@@ -128,3 +138,145 @@ function updateItemQuantity (itemToUpdate, newQuantity) {
          localStorage.setItem("cart", JSON.stringify(arrayProductsInCart));
          location.reload();
 }
+
+// ---------------------------------------------------------------- Le Formulaire -----------------------------------------------------------------------------------
+
+//-------------------- Récuperation des données du formulaire -------------------------------------------
+const btnEnvoyerFormulaire = document.querySelector("#order")
+btnEnvoyerFormulaire.addEventListener("click", (e) => {
+    e.preventDefault();
+
+// On recupère les differentes données 
+const contact = {
+    prenom : document.querySelector("#firstName").value,
+    nom : document.querySelector("#lastName").value,
+    adresse : document.querySelector("#address").value,
+    ville : document.querySelector("#city").value,
+    email : document.querySelector("#email ").value,
+}
+
+// ------------------------ Vérification des données du formulaire---------------------------------
+const textAlert = (value) => {
+    return `${value}: n'est pas valide`;
+}
+// ------------ regEx de controle --------------------
+const regExPrenomNomVille = (value) => {
+    return /^([ \u00c0-\u01ffa-zA-Z'\-])+$/.test(value);
+}
+const regExMail = (value) => {
+    return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
+}
+const regExAdresse = (value) => {
+    return /^[a-zA-Z0-9\s\,\''\-]*$/.test(value);
+}
+
+// controle du prenom
+function prenomControl() { 
+    const lePrenom = contact.prenom;
+    if(regExPrenomNomVille(lePrenom)) {
+        return true;
+    } else {
+        alert(textAlert("Prenom"));
+        return false;
+        }
+}
+// controle du nom
+function nomControl() { 
+    const leNom = contact.nom;
+    if(regExPrenomNomVille(leNom)) {
+        return true;
+    } else {
+        alert(textAlert("Nom"));
+        return false;
+        }
+}
+// Controle de la ville
+function villeControl() { 
+    const laVille = contact.ville;
+    if(regExPrenomNomVille(laVille)) {
+        return true;
+    } else {
+        alert(textAlert("Ville"));
+        return false;
+        }
+}
+//  controle de l'email
+function mailControl() { 
+    const leMail = contact.email;
+    if(regExMail(leMail)) {
+        return true;
+    } else {
+        alert(textAlert("E-mail"));
+        return false;
+        }
+}
+// controle de l'adresse
+function adresseControl() { 
+    const leAdresse = contact.adresse;
+    if(regExAdresse(leAdresse)) {
+        return true;
+    } else {
+        alert(textAlert("Adresse"));
+        return false;
+        }
+}
+
+//------------ Mettre les données dans le localStorage si verification OK --------------------
+if(prenomControl() && nomControl() && villeControl() && mailControl() && adresseControl())  {
+// Création d'un tableau contact dans le local storage
+localStorage.setItem("contact", JSON.stringify(contact));
+// Rassembler à la fois les données du formulaire et celles du panier dans un objet
+const aEnvoyer = {
+    copyOfLS,
+    contact,
+}
+
+console.log("aEnvoyer")
+console.log(aEnvoyer)
+
+envoieVersServ(aEnvoyer);
+
+} else {
+    alert("Veuillez vérifier les informations que vous avez saisie")
+}
+
+
+
+// Envoyer les données aEnvoyer dans un serveur *********************
+
+function envoieVersServ(aEnvoyer){
+
+// Création de l'entête de la requête
+
+const goToServ = fetch("http://localhost:3000/api/order", {
+    method: "POST",
+    body: JSON.stringify(aEnvoyer),
+    headers: { "Content-Type": "application/json" },
+  });
+
+//  voir le resultat du serveur dans la console
+
+goToServ.then(async(response)=>{
+    try{
+        console.log("response");
+        console.log(response);
+
+        const contenu = await response.json();
+        console.log("contenu");
+        console.log(contenu);
+
+//   --Mettre l'ID dans le localStorage--
+        localStorage.setItem("orderId", contenu._id); 
+
+//   --Vers page de confirmation--
+        window.location = "../html/confirmation.html";
+            
+    } catch(e){
+        console.log(e)
+        }
+    })
+}
+
+
+
+})
