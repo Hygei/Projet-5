@@ -1,3 +1,4 @@
+
 // Récupération des données du panier
 let copyOfLS = JSON.parse(localStorage.getItem("cart"));
 console.log (copyOfLS)
@@ -7,6 +8,7 @@ let cart = document.getElementById("cart__items");
 for (let item in copyOfLS) {
     let itemArticle = document.createElement("article")
     document.getElementById("cart__items").appendChild(itemArticle);
+    itemArticle.classList.add ("cart__item");
 
     let itemImg = document.createElement("img");
     itemArticle.appendChild(itemImg);
@@ -20,27 +22,26 @@ for (let item in copyOfLS) {
     let itemContentDesc = document.createElement("div");
     itemContent.appendChild(itemContentDesc);
     itemContentDesc.classList.add ("cart__item__content__description");
-    itemContentDesc.innerHTML = `${copyOfLS[item].name} <br> ${"Prix : " + copyOfLS[item].price + " €"} <br> ${"Couleur : " + copyOfLS[item].color}`;
+    itemContentDesc.innerHTML += `<h2>${copyOfLS[item].name}</h2> <p>${copyOfLS[item].color}</p> <p>${copyOfLS[item].price + " €"}</p>`;
 
     let itemContentSet = document.createElement("div");
     itemContent.appendChild(itemContentSet);
-    itemContentDesc.classList.add ("cart__item__content__settings");
+    itemContentSet.classList.add ("cart__item__content__settings");
     
     let itemContentSetQuantity = document.createElement("div");
-    itemContent.appendChild(itemContentSetQuantity);
-    itemContentDesc.classList.add ("cart__item__content__settings__quantity");
-   
-    let p = document.createElement("p");
-    let label = document.createElement("label");
-    label.textContent = "Quantité : ";
+    itemContentSet.appendChild(itemContentSetQuantity);
+    itemContentSetQuantity.classList.add ("cart__item__content__settings__quantity");
+
+    let label = document.createElement("p");
+    label.textContent = "Qté : ";
     let input = document.createElement("input");
     input.setAttribute("type","number");
+    input.classList.add ("itemQuantity")
     input.setAttribute("name","itemQuantity");
     input.setAttribute("value",copyOfLS[item].quantity);
+    itemContentSetQuantity.appendChild(label);
+    itemContentSetQuantity.appendChild(input);
 
-    itemContentSetQuantity.appendChild(p);
-    p.appendChild(label);
-    p.appendChild(input);
     // changer la valeur dans l'input fait changer le tableau
     input.addEventListener("change", (e) => {
         updateItemQuantity (copyOfLS[item], e.target.value);
@@ -50,9 +51,9 @@ for (let item in copyOfLS) {
         }
     })
 
-    let itemContentSetDelete = document.createElement("button");
+    let itemContentSetDelete = document.createElement("p");
     itemContent.appendChild(itemContentSetDelete);
-    itemContentDesc.classList.add ("cart__item__content__settings__delete");
+    itemContentSetDelete.classList.add ("cart__item__content__settings__delete");
     itemContentSetDelete.innerHTML = `<p class=deleteItem>Supprimer</p>`
     
     itemContentSetDelete.addEventListener("click", (e) => {
@@ -148,17 +149,14 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
 
 // On recupère les differentes données 
 const contact = {
-    prenom : document.querySelector("#firstName").value,
-    nom : document.querySelector("#lastName").value,
-    adresse : document.querySelector("#address").value,
-    ville : document.querySelector("#city").value,
-    email : document.querySelector("#email ").value,
+    firstName : document.querySelector("#firstName").value,
+    lastName : document.querySelector("#lastName").value,
+    address : document.querySelector("#address").value,
+    city : document.querySelector("#city").value,
+    email : document.querySelector("#email").value,
 }
 
 // ------------------------ Vérification des données du formulaire---------------------------------
-const textAlert = (value) => {
-    return `${value}: n'est pas valide`;
-}
 // ------------ regEx de controle --------------------
 const regExPrenomNomVille = (value) => {
     return /^([ \u00c0-\u01ffa-zA-Z'\-])+$/.test(value);
@@ -172,31 +170,37 @@ const regExAdresse = (value) => {
 
 // controle du prenom
 function prenomControl() { 
-    const lePrenom = contact.prenom;
+    const lePrenom = contact.firstName;
     if(regExPrenomNomVille(lePrenom)) {
         return true;
     } else {
-        alert(textAlert("Prenom"));
+        let firstNameErrorMsg = document.createElement("p");
+        document.getElementById("firstNameErrorMsg").appendChild(firstNameErrorMsg);
+        firstNameErrorMsg.innerHTML = "Ce champ n'est pas valide";
         return false;
         }
 }
 // controle du nom
 function nomControl() { 
-    const leNom = contact.nom;
+    const leNom = contact.lastName;
     if(regExPrenomNomVille(leNom)) {
         return true;
     } else {
-        alert(textAlert("Nom"));
+        let lastNameErrorMsg = document.createElement("p");
+        document.getElementById("lastNameErrorMsg").appendChild(lastNameErrorMsg);
+        lastNameErrorMsg.innerHTML = "Ce champ n'est pas valide";
         return false;
         }
 }
 // Controle de la ville
 function villeControl() { 
-    const laVille = contact.ville;
+    const laVille = contact.city;
     if(regExPrenomNomVille(laVille)) {
         return true;
     } else {
-        alert(textAlert("Ville"));
+        let cityErrorMsg = document.createElement("p");
+        document.getElementById("cityErrorMsg").appendChild(cityErrorMsg);
+        cityErrorMsg.innerHTML = "Ce champ n'est pas valide";
         return false;
         }
 }
@@ -206,29 +210,39 @@ function mailControl() {
     if(regExMail(leMail)) {
         return true;
     } else {
-        alert(textAlert("E-mail"));
+        let emailErrorMsg = document.createElement("p");
+        document.getElementById("emailErrorMsg").appendChild(emailErrorMsg);
+        emailErrorMsg.innerHTML = "Ce champ n'est pas valide";
         return false;
         }
 }
 // controle de l'adresse
 function adresseControl() { 
-    const leAdresse = contact.adresse;
+    const leAdresse = contact.address;
     if(regExAdresse(leAdresse)) {
         return true;
     } else {
-        alert(textAlert("Adresse"));
+        let addressErrorMsg = document.createElement("p");
+        document.getElementById("addressErrorMsg").appendChild(addressErrorMsg);
+        addressErrorMsg.innerHTML = "Ce champ n'est pas valide";
         return false;
         }
 }
 
 //------------ Mettre les données dans le localStorage si verification OK --------------------
 if(prenomControl() && nomControl() && villeControl() && mailControl() && adresseControl())  {
-// Création d'un tableau contact dans le local storage
+// stockage des données "contact" dans le local storage
 localStorage.setItem("contact", JSON.stringify(contact));
+// Création d'un tableau avec les Id des produits
+let products = [];
+for (k = 0; k < copyOfLS.length; k++){
+    let productId = copyOfLS[k]._id
+    products.push(productId)
+}
 // Rassembler à la fois les données du formulaire et celles du panier dans un objet
 const aEnvoyer = {
-    copyOfLS,
     contact,
+    products,
 }
 
 console.log("aEnvoyer")
@@ -236,10 +250,7 @@ console.log(aEnvoyer)
 
 envoieVersServ(aEnvoyer);
 
-} else {
-    alert("Veuillez vérifier les informations que vous avez saisie")
-}
-
+}   
 
 
 // Envoyer les données aEnvoyer dans un serveur *********************
@@ -248,7 +259,7 @@ function envoieVersServ(aEnvoyer){
 
 // Création de l'entête de la requête
 
-const goToServ = fetch("http://localhost:3000/api/order", {
+const goToServ = fetch("http://localhost:3000/api/products/order", {
     method: "POST",
     body: JSON.stringify(aEnvoyer),
     headers: { "Content-Type": "application/json" },
@@ -266,7 +277,7 @@ goToServ.then(async(response)=>{
         console.log(contenu);
 
 //   --Mettre l'ID dans le localStorage--
-        localStorage.setItem("orderId", contenu._id); 
+        localStorage.setItem("orderId", contenu.orderId); 
 
 //   --Vers page de confirmation--
         window.location = "../html/confirmation.html";

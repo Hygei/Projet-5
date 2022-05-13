@@ -33,12 +33,12 @@ function getProducts() {
             productArticle.appendChild(productImg);
             productImg.src = resultatAPI[product].imageUrl;
 
-            let productTitle = document.createElement("div");
+            let productTitle = document.createElement("h3");
             productArticle.appendChild(productTitle);
             productTitle.classList.add("productName");
             productTitle.innerHTML = resultatAPI[product].name;
 
-            let productDesc = document.createElement("div");
+            let productDesc = document.createElement("p");
             productArticle.appendChild(productDesc);
             productDesc.classList.add("productDescription");
             productDesc.innerHTML = resultatAPI[product].description;
