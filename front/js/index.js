@@ -1,8 +1,5 @@
-main();
+getProducts();
 
-function main() {
-  getProducts();
-}
 // recupération des données de l'API
 function getProducts() {
     fetch("http://localhost:3000/api/products")
@@ -10,11 +7,9 @@ function getProducts() {
       return res.json()
     })
     .catch((error) => {
-        let productsContainer = document.querySelector(".items");
+        let productsContainer = document.querySelector("#items");
         productsContainer.innerHTML =
-          "Nous n'avons pas réussi à afficher nos produits. Avez vous bien lancé le serveur local (Port 3000) ? <br>Si le problème persiste, contactez-nous.";
-        productsContainer.style.textAlign = "center";
-        productsContainer.style.padding = "30vh 0";
+          "<p>Nous n'avons pas réussi à afficher nos produits. Avez vous bien lancé le serveur local (Port 3000) ? <br>Si le problème persiste, contactez-nous.</p>";
       })
     
     // Afficher les differents produits 
