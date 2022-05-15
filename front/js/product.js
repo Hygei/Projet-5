@@ -15,7 +15,7 @@ fetch(newUrl)
         // lancement de la fonction
         function addCard(product) {
 
-            // insertion des données du produit
+            // insertion des données du produit dans le HTML
             const ProductImage = document.querySelector(".item__img");
             ProductImage.innerHTML = `<img src="${product.imageUrl}" alt="$Photographie d'un canapé">`;
 
@@ -41,38 +41,44 @@ fetch(newUrl)
             const color = document.getElementById("colors");
             const quantity = document.getElementById("quantity");
             
-            let productAdded = {
-                name: product.name,
-                price: product.price,
-                _id: newId,
-                color: color.value,
-                quantity: parseInt(quantity.value, 10),
-                img: product.imageUrl,
-            };
-
-            //  Gestion du localStorage
-            let arrayProductsInCart = [];
-      
-            // Si le localStorage existe, on récupère son contenu, on l'insère dans le tableau arrayProductsInCart, puis on le renvoit vers le localStorage avec le nouveau produit ajouté.
-            if (localStorage.getItem("cart") !== null) {
-            arrayProductsInCart = JSON.parse(localStorage.getItem("cart"));
+            if (color.value !== ""){
+                
+                    let productAdded = {
+                        name: product.name,
+                        price: product.price,
+                        _id: newId,
+                        color: color.value,
+                        quantity: parseInt(quantity.value, 10),
+                        img: product.imageUrl,
+                    };
         
-            } 
-            // trouver dans le tableau un item qui a le même ID et couleur que l'item à ajouter 
-            const foundIndex = arrayProductsInCart.findIndex (item => {
-                return item._id === productAdded._id && item.color === productAdded.color
-            })
-            // Si l'item existe dans le tableau récupérer l'index de l'item dans le tableau
-            if (foundIndex !== -1) {
-                // avec l'index de l'item, incrémenter la qté 
-                arrayProductsInCart[foundIndex].quantity += parseInt(productAdded.quantity, 10)
-            } else {
-                // Sinon pousser l'item dans le tableau
-                arrayProductsInCart.push(productAdded);
-            }
+                    //  Gestion du localStorage
+                    let arrayProductsInCart = [];
+            
+                    // Si le localStorage existe, on récupère son contenu, on l'insère dans le tableau arrayProductsInCart, puis on le renvoit vers le localStorage avec le nouveau produit ajouté.
+                    if (localStorage.getItem("cart") !== null) {
+                    arrayProductsInCart = JSON.parse(localStorage.getItem("cart"));
+                
+                    } 
+                    // trouver dans le tableau un item qui a le même ID et couleur que l'item à ajouter 
+                    const foundIndex = arrayProductsInCart.findIndex (item => {
+                        return item._id === productAdded._id && item.color === productAdded.color
+                    })
+                    // Si l'item existe dans le tableau récupérer l'index de l'item dans le tableau
+                    if (foundIndex !== -1) {
+                        // avec l'index de l'item, incrémenter la qté 
+                        arrayProductsInCart[foundIndex].quantity += parseInt(productAdded.quantity, 10)
+                    } else {
+                        // Sinon pousser l'item dans le tableau
+                        arrayProductsInCart.push(productAdded);
+                    }
+        
+        
+                    localStorage.setItem("cart", JSON.stringify(arrayProductsInCart));
+                } else {
+                alert("veuillez séléctionner une couleur");
+                }
 
-
-            localStorage.setItem("cart", JSON.stringify(arrayProductsInCart));
         });
     })
 
