@@ -282,7 +282,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
         localStorage.setItem("orderId", contenu.orderId);
 
         //   --Vers page de confirmation--
-        window.location = "../html/confirmation.html";
+        // window.location = "../html/confirmation.html";
       } catch (e) {
         console.log(e);
       }
