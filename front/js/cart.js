@@ -278,11 +278,8 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
         console.log("contenu");
         console.log(contenu);
 
-        //   --Mettre l'ID dans le localStorage--
-        localStorage.setItem("orderId", contenu.orderId);
-
         //   --Vers page de confirmation--
-        // window.location = "../html/confirmation.html";
+        window.location = `confirmation.html?id=${contenu.orderId}`;
       } catch (e) {
         console.log(e);
       }

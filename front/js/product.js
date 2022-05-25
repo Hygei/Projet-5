@@ -51,7 +51,7 @@ fetch(newUrl)
 
         //  Gestion du localStorage
         let arrayProductsInCart = [];
-
+        console.log(arrayProductsInCart);
         // Si le localStorage existe, on récupère son contenu, on l'insère dans le tableau arrayProductsInCart, puis on le renvoit vers le localStorage avec le nouveau produit ajouté.
         if (localStorage.getItem("cart") !== null) {
           arrayProductsInCart = JSON.parse(localStorage.getItem("cart"));
