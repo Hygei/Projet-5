@@ -175,7 +175,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
       document
         .getElementById("firstNameErrorMsg")
         .appendChild(firstNameErrorMsg);
-      firstNameErrorMsg.innerHTML = "Ce champ n'est pas valide";
+      firstNameErrorMsg.innerHTML = "Le prenom est invalide, il ne doit pas contenir de chiffres ni de caractères spéciaux";
       return false;
     }
   }
@@ -187,7 +187,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     } else {
       let lastNameErrorMsg = document.createElement("p");
       document.getElementById("lastNameErrorMsg").appendChild(lastNameErrorMsg);
-      lastNameErrorMsg.innerHTML = "Ce champ n'est pas valide";
+      lastNameErrorMsg.innerHTML = "Le nom est invalide, il ne doit pas contenir de chiffres ni de caractères spéciaux";
       return false;
     }
   }
@@ -199,7 +199,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     } else {
       let cityErrorMsg = document.createElement("p");
       document.getElementById("cityErrorMsg").appendChild(cityErrorMsg);
-      cityErrorMsg.innerHTML = "Ce champ n'est pas valide";
+      cityErrorMsg.innerHTML = "La ville est invalide, elle ne doit pas contenir de chiffres ni de caractères spéciaux";
       return false;
     }
   }
@@ -211,7 +211,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     } else {
       let emailErrorMsg = document.createElement("p");
       document.getElementById("emailErrorMsg").appendChild(emailErrorMsg);
-      emailErrorMsg.innerHTML = "Ce champ n'est pas valide";
+      emailErrorMsg.innerHTML = "L'email est invalide";
       return false;
     }
   }
@@ -223,7 +223,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     } else {
       let addressErrorMsg = document.createElement("p");
       document.getElementById("addressErrorMsg").appendChild(addressErrorMsg);
-      addressErrorMsg.innerHTML = "Ce champ n'est pas valide";
+      addressErrorMsg.innerHTML = "L'adresse est invalide";
       return false;
     }
   }

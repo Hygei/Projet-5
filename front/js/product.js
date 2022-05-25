@@ -40,7 +40,7 @@ fetch(newUrl)
       const color = document.getElementById("colors");
       const quantity = document.getElementById("quantity");
 
-      if (color.value !== "") {
+      if (color.value !== "" && quantity.value > 0) {
         let productAdded = {
           name: product.name,
           _id: newId,
@@ -75,8 +75,10 @@ fetch(newUrl)
         }
 
         localStorage.setItem("cart", JSON.stringify(arrayProductsInCart));
+        alert("Le produit à bien été ajouté au panier");
+
       } else {
-        alert("veuillez séléctionner une couleur");
+        alert("Vous devez séléctionner une couleur et une quantité");
       }
     });
   });
