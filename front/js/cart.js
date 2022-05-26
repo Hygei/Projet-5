@@ -211,7 +211,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     } else {
       let emailErrorMsg = document.createElement("p");
       document.getElementById("emailErrorMsg").appendChild(emailErrorMsg);
-      emailErrorMsg.innerHTML = "L'email est invalide";
+      emailErrorMsg.innerHTML = "L'email est invalide, attention aux espaces";
       return false;
     }
   }
@@ -223,7 +223,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     } else {
       let addressErrorMsg = document.createElement("p");
       document.getElementById("addressErrorMsg").appendChild(addressErrorMsg);
-      addressErrorMsg.innerHTML = "L'adresse est invalide";
+      addressErrorMsg.innerHTML = "L'adresse est invalide, elle ne doit pas contenir d'accents";
       return false;
     }
   }
